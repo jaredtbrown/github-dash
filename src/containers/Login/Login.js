@@ -18,8 +18,7 @@ const Login = (props) => {
             setError('');
             const gitHubProvider = new firebase.auth.GithubAuthProvider();
             const result = await firebase.auth().signInWithPopup(gitHubProvider);
-            const credential = result.credential;
-            localStorage.setItem('token', credential.token);
+            localStorage.setItem('token', result.credential.accessToken);
             props.history.push('/');
         } catch (error) {
             console.error(error);

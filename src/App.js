@@ -3,6 +3,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Login from './containers/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import theme from './theme'
+import Home from './containers/Home';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <ProtectedRoute exact path ="/" component={() => { return (<div>Protected</div>) }} />
+          <ProtectedRoute exact path ="/" component={Home} />
           <Route path="*" component={() => {return (<div>404</div>) }} />
         </Switch>
       </Router>
