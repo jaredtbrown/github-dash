@@ -7,6 +7,7 @@ const theme = {
             main: '#dcffe4',
         },
     },
+    type: 'dark'
 };
 
 export default theme;
