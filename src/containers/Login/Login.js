@@ -1,6 +1,7 @@
 import React from 'react';
 import firebase from 'firebase';
 import 'firebase/auth';
+import Button from '@material-ui/core/Button';
 
 const Login = (props) => {
     const gitHubProvider = new firebase.auth.GithubAuthProvider();
@@ -16,7 +17,7 @@ const Login = (props) => {
         }
     }
 
-    return (<button onClick={signIn}>Login with Github</button>)
+    return (<Button variant="contained" color="primary" onClick={signIn}>Login with Github</Button>)
 }
 
 export default Login;
