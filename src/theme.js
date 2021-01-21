@@ -1,5 +1,6 @@
 const theme = {
     palette: {
+        type: 'dark',
         primary: {
             main: '#24292e',
         },
@@ -7,7 +8,6 @@ const theme = {
             main: '#dcffe4',
         },
     },
-    type: 'dark'
 };
 
 export default theme;

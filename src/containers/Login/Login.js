@@ -17,6 +17,7 @@ const Login = (props) => {
         try {
             setError('');
             const gitHubProvider = new firebase.auth.GithubAuthProvider();
+            gitHubProvider.addScope('user');
             const result = await firebase.auth().signInWithPopup(gitHubProvider);
             localStorage.setItem('token', result.credential.accessToken);
             props.history.push('/');
