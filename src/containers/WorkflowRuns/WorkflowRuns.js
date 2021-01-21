@@ -10,6 +10,8 @@ import TableHead from '@material-ui/core/TableHead';
 import orderBy from 'lodash.orderby';
 import GitHubApiClient from '../../githubApiClient';
 import WorkflowStatus from '../../components/WorkflowStatus';
+import Typography from '@material-ui/core/Typography';
+import { WorkflowIcon } from '@primer/octicons-react';
 
 const WorkflowRuns = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
@@ -57,7 +59,11 @@ const WorkflowRuns = (props) => {
     return (
         <Card>
             <CardHeader
-                title="Workflow Runs"
+                title={
+                    <Typography variant="h5">
+                        <WorkflowIcon size="medium" />&nbsp; Workflow Runs
+                    </Typography>
+                }
             />
             <CardContent>
                 <Table>
