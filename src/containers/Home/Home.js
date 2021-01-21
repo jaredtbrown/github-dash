@@ -35,7 +35,7 @@ const Home = (props) => {
     }
 
     return (
-        <Grid container item spacing={2} xs={12} style={{ padding: 16 }}>
+        <Grid container item spacing={2} xs={12} style={{ padding: 16, paddingTop: 80 }}>
             <Grid lg={3} md={6} xs={12} item>
                 <MyWorkCard onClick={handleOnMyWorkClick} />
             </Grid>

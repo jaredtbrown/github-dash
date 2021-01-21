@@ -20,7 +20,7 @@ const Toolbar = (props) => {
                 {
                     props.user &&
                     <Button color="inherit" onClick={signOut}>
-                        Logout
+                        Log out
                     </Button>
                 }
             </MuiToolbar>
