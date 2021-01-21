@@ -22,6 +22,10 @@ const Home = (props) => {
         props.history.push(`/org/${org.login}`)
     };
 
+    const handleOnMyWorkClick = () => {
+        props.history.push('/mywork');
+    };
+
     const renderOrganization = (org) => {
         return (
             <Grid lg={3} md={6} xs={12} item key={org.id}>
@@ -33,7 +37,7 @@ const Home = (props) => {
     return (
         <Grid container item spacing={2} xs={12} style={{ padding: 16 }}>
             <Grid lg={3} md={6} xs={12} item>
-                <MyWorkCard />
+                <MyWorkCard onClick={handleOnMyWorkClick} />
             </Grid>
             {
                 organizations.map(renderOrganization)

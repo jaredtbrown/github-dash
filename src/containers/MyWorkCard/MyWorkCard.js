@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import GitHubApiClient from '../../githubApiClient';
 import Typography from '@material-ui/core/Typography';
 
-const MyWorkCard = () => {
+const MyWorkCard = (props) => {
     const [user, setUser] = useState({});
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const MyWorkCard = () => {
     }, []);
 
     return (
-        <Card>
+        <Card style={{ cursor: 'pointer' }} onClick={props.onClick}>
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item>

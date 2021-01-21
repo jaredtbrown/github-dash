@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import theme from './theme'
 import Home from './containers/Home';
 import Organization from './containers/Organization';
+import MyWork from './containers/MyWork';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Switch>
           <Route exact path="/login" component={Login} />
           <ProtectedRoute exact path ="/" component={Home} />
+          <ProtectedRoute exact path ="/mywork" component={MyWork} />
           <ProtectedRoute exact path ="/org/:orgid" component={Organization} />
           <Route path="*" component={() => {return (<div>404</div>) }} />
         </Switch>
