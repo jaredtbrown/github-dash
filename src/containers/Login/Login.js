@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,8 +9,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
+import {withRouter} from 'react-router-dom'
 
 const Login = (props) => {
+    if (props.user) {
+        props.history.push('/');
+    }
+
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -18,7 +23,6 @@ const Login = (props) => {
             const result = await firebase.auth().getRedirectResult();
             if (result.credential) {
                 localStorage.setItem('token', result.credential.accessToken);
-                props.history.push('/');
             }
         };
 
@@ -58,12 +62,12 @@ const Login = (props) => {
                         }
                     />
                     <CardContent>
-                        <Typography variant="subtitle1">GitHub Dash. A dashboard for GitHub. Login with your GitHub account to get started.</Typography>
+                        <Typography variant="subtitle1">GitHub Dash. A dashboard for GitHub.</Typography>
                     </CardContent>
                     <CardActions>
                         <Grid container alignItems="center" justify="center">
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={signIn}>
+                                <Button variant="outlined" color="inherit" onClick={signIn}>
                                     <MarkGithubIcon />&nbsp;Login with Github
                                 </Button>
                             </Grid>
@@ -80,4 +84,4 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+export default withRouter(Login);
