@@ -4,9 +4,11 @@ const theme = {
         primary: {
             main: '#24292e',
         },
-        secondary: {
-            main: '#dcffe4',
-        },
+        githubColors: {
+            green: '#28a745',
+            yellow: '#ffd33d',
+            red: '#d73a49'
+        }
     },
 };
 

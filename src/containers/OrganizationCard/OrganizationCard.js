@@ -21,7 +21,7 @@ const OrganizationCard = (props) => {
     }, [props.login]);
 
     return (
-        <Card>
+        <Card onClick={props.onClick}>
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item>

@@ -4,7 +4,7 @@ import GitHubApiClient from '../../githubApiClient'
 import OrganizationCard from '../OrganizationCard';
 import MyWorkCard from '../MyWorkCard';
 
-const Home = () => {
+const Home = (props) => {
     const [organizations, setOrganizations] = useState([]);
 
     const getOrganizations = async () => {
@@ -18,10 +18,14 @@ const Home = () => {
         getOrganizations();
     }, []);
 
+    const handleOnOrgClick = (org) => {
+        props.history.push(`/org/${org.login}`)
+    };
+
     const renderOrganization = (org) => {
         return (
             <Grid lg={3} md={6} xs={12} item key={org.id}>
-                <OrganizationCard login={org.login} />
+                <OrganizationCard login={org.login} onClick={() => handleOnOrgClick(org)} />
             </Grid>
         )
     }

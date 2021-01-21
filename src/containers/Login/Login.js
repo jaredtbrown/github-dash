@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import 'firebase/auth';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import { MarkGithubIcon } from '@primer/octicons-react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,6 +18,7 @@ const Login = (props) => {
             setError('');
             const gitHubProvider = new firebase.auth.GithubAuthProvider();
             gitHubProvider.addScope('user');
+            gitHubProvider.addScope('repo');
             const result = await firebase.auth().signInWithPopup(gitHubProvider);
             localStorage.setItem('token', result.credential.accessToken);
             props.history.push('/');
@@ -53,7 +54,7 @@ const Login = (props) => {
                         <Grid container alignItems="center" justify="center">
                             <Grid item>
                                 <Button variant="contained" color="primary" onClick={signIn}>
-                                    <GitHubIcon />&nbsp;Login with Github
+                                    <MarkGithubIcon />&nbsp;Login with Github
                                 </Button>
                             </Grid>
                             <Grid item xs={12}>
