@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from 'firebase';
 import 'firebase/auth';
 import Button from '@material-ui/core/Button';
@@ -13,15 +13,25 @@ import Typography from '@material-ui/core/Typography';
 const Login = (props) => {
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        const getCredentials = async () => {
+            const result = await firebase.auth().getRedirectResult();
+            if (result.credential) {
+                localStorage.setItem('token', result.credential.accessToken);
+                props.history.push('/');
+            }
+        };
+
+        getCredentials();
+    });
+
     const signIn = async () => {
         try {
             setError('');
             const gitHubProvider = new firebase.auth.GithubAuthProvider();
             gitHubProvider.addScope('user');
             gitHubProvider.addScope('repo');
-            const result = await firebase.auth().signInWithPopup(gitHubProvider);
-            localStorage.setItem('token', result.credential.accessToken);
-            props.history.push('/');
+            firebase.auth().signInWithRedirect(gitHubProvider);
         } catch (error) {
             console.error(error);
             setError('Something went wrong. Please try again');

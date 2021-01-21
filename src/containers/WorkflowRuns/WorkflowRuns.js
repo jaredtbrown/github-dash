@@ -47,7 +47,7 @@ const WorkflowRuns = (props) => {
                     {run.name}
                 </TableCell>
                 <TableCell>
-                    {run.repository.name}
+                    <a href={run.repository.url} target="_blank" rel="noreferrer">{run.repository.name}</a>
                 </TableCell>
                 <TableCell>
                     {run.created_at}
