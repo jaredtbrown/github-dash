@@ -11,6 +11,8 @@ import orderBy from 'lodash.orderby';
 import GitHubApiClient from '../../githubApiClient';
 import WorkflowStatus from '../../components/WorkflowStatus';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import TableContainer from '@material-ui/core/TableContainer';
 import { WorkflowIcon } from '@primer/octicons-react';
 
 const WorkflowRuns = (props) => {
@@ -20,7 +22,7 @@ const WorkflowRuns = (props) => {
         const getRepos = async () => {
             const token = localStorage.getItem('token');
             const gitHubApiClient = new GitHubApiClient(token);
-            return await gitHubApiClient.get(`/orgs/${props.match.params.orgid}/repos`);
+            return await gitHubApiClient.get(`${props.resource}/repos`);
         }
 
         const getAllRepoWorkflows = async () => {
@@ -37,7 +39,7 @@ const WorkflowRuns = (props) => {
             setWorkflowRuns(orderedRuns);
         }
         getAllRepoWorkflows();
-    }, [props.match.params.orgid]);
+    }, [props.resource]);
 
     const renderWorkflowRun = (run) => {
         return (
@@ -47,7 +49,7 @@ const WorkflowRuns = (props) => {
                     {run.name}
                 </TableCell>
                 <TableCell>
-                    <a href={run.repository.url} target="_blank" rel="noreferrer">{run.repository.name}</a>
+                    <Link color="inherit" href={run.repository.html_url} target="_blank" rel="noreferrer">{run.repository.name}</Link>
                 </TableCell>
                 <TableCell>
                     {run.created_at}
@@ -66,7 +68,7 @@ const WorkflowRuns = (props) => {
                 }
             />
             <CardContent>
-                <Table>
+                <Table stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell>

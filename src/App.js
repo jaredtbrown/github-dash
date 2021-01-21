@@ -4,7 +4,7 @@ import Login from './containers/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import theme from './theme'
 import Home from './containers/Home';
-import WorkflowRuns from './containers/WorkflowRuns'
+import Organization from './containers/Organization';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Switch>
           <Route exact path="/login" component={Login} />
           <ProtectedRoute exact path ="/" component={Home} />
-          <ProtectedRoute exact path ="/org/:orgid" component={WorkflowRuns} />
+          <ProtectedRoute exact path ="/org/:orgid" component={Organization} />
           <Route path="*" component={() => {return (<div>404</div>) }} />
         </Switch>
       </Router>

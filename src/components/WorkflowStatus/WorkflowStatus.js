@@ -23,7 +23,11 @@ const WorkflowStatus = (props) => {
     
     const getIcon = () => {
         if (props.status === 'queued') {
-            return <StopwatchIcon />;
+            return (
+                <Icon>
+                    <StopwatchIcon />
+                </Icon>
+            );
         }
 
         if (props.status === 'in_progress') {
@@ -48,13 +52,19 @@ const WorkflowStatus = (props) => {
                     </Icon>
                 );
             default:
-                return <SkipIcon />;
+                return (
+                    <Icon>
+                        <SkipIcon />
+                    </Icon>
+                );
         }
     }
 
+    const icon = getIcon();
+    const text = getTooltipText();
     return (
-        <Tooltip title={getTooltipText()}>
-         { getIcon() }
+        <Tooltip title={text}>
+            { icon }
         </Tooltip>
     );
 }
