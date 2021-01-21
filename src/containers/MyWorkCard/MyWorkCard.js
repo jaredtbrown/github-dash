@@ -1,38 +1,35 @@
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
-import React, { useEffect, useState } from 'react';
 import GitHubApiClient from '../../githubApiClient';
 import Typography from '@material-ui/core/Typography';
 
-const OrganizationCard = (props) => {
-    const [organization, setOrganization] = useState({});
+const MyWorkCard = () => {
+    const [user, setUser] = useState({});
 
     useEffect(() => {
-        const getOrganization = async () => {
+        const getUser = async () => {
             const token = localStorage.getItem('token');
             const gitHubApiClient = new GitHubApiClient(token);
-            const organization = await gitHubApiClient.get(`/orgs/${props.login}`);
-            setOrganization(organization);
+            const user = await gitHubApiClient.get(`/user`);
+            setUser(user);
         }
 
-        getOrganization();
-    }, [props.login]);
+        getUser();
+    }, []);
 
     return (
         <Card>
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item>
-                        <Avatar src={organization.avatar_url} />
+                        <Avatar src={user.avatar_url} />
                     </Grid>
                     <Grid item>
                         <Typography variant="h6">
-                            {organization.name}
-                        </Typography>
-                        <Typography variant="caption">
-                            {organization.login}
+                            My Work
                         </Typography>
                     </Grid>
                 </Grid>
@@ -41,4 +38,4 @@ const OrganizationCard = (props) => {
     );
 }
  
-export default OrganizationCard;
+export default MyWorkCard;
