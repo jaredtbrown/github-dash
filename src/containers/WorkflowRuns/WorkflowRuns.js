@@ -12,7 +12,6 @@ import GitHubApiClient from '../../githubApiClient';
 import WorkflowStatus from '../../components/WorkflowStatus';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import TableContainer from '@material-ui/core/TableContainer';
 import { WorkflowIcon } from '@primer/octicons-react';
 
 const WorkflowRuns = (props) => {
@@ -43,7 +42,7 @@ const WorkflowRuns = (props) => {
 
     const renderWorkflowRun = (run) => {
         return (
-            <TableRow key={run.id}>
+            <TableRow key={run.id} onClick={() => { window.open(run.html_url, '_blank') }} style={{ cursor: 'pointer' }}>
                 <TableCell>
                     <WorkflowStatus status={run.status} conclusion={run.conclusion} />&nbsp;
                     {run.name}
