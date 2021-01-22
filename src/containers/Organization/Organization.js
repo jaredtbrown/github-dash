@@ -3,12 +3,13 @@ import Grid from '@material-ui/core/Grid';
 import orderBy from 'lodash.orderby';
 import filter from 'lodash.filter';
 import Icon from '@material-ui/core/Icon';
-import { RepoIcon, WorkflowIcon, GitPullRequestIcon, OrganizationIcon } from '@primer/octicons-react';
+import { RepoIcon, WorkflowIcon, GitPullRequestIcon, OrganizationIcon, CodeIcon } from '@primer/octicons-react';
 import { Doughnut } from 'react-chartjs-2';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import { countBy, toPairs, flow, head, last, maxBy, partialRight } from 'lodash';
 import WorkflowRunsTable from '../../components/WorkflowRunsTable';
 import GitHubApiClient from '../../githubApiClient';
 import theme from '../../theme';
@@ -18,6 +19,7 @@ const Organization = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
     const [numberOfRepos, setNumberOfRepos] = useState(0);
     const [numberOfOpenPrs, setNumberOfOpenPrs] = useState(0);
+    const [topLanguage, setTopLangague] = useState('');
     const [completedWorkflowRateData, setCompletedWorkflowRateData] = useState({
         total: 0,
         successful: 0,
@@ -56,6 +58,14 @@ const Organization = (props) => {
             const gitHubApiClient = new GitHubApiClient(token);
             var response = await gitHubApiClient.get(`/orgs/${props.match.params.orgid}/repos`);
             setNumberOfRepos(response.length);
+            const langauges = response.map((repo) => repo.language);
+            const language = flow(
+                countBy,
+                toPairs,
+                partialRight(maxBy, last),
+                head
+              )(langauges);
+            setTopLangague(language);
             return response;
         }
 
@@ -124,6 +134,18 @@ const Organization = (props) => {
                                 />
                                 <Typography>
                                     {numberOfOpenPrs}
+                                </Typography>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText 
+                                    primary={
+                                        <React.Fragment>
+                                            <CodeIcon />&nbsp; Top Language
+                                        </React.Fragment>
+                                    }
+                                />
+                                <Typography>
+                                    {topLanguage}
                                 </Typography>
                             </ListItem>
                         </List>
