@@ -3,8 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import orderBy from 'lodash.orderby';
 import filter from 'lodash.filter';
 import Icon from '@material-ui/core/Icon';
-import { RepoIcon, WorkflowIcon } from '@primer/octicons-react';
+import { RepoIcon, WorkflowIcon, GitPullRequestIcon } from '@primer/octicons-react';
 import { Doughnut } from 'react-chartjs-2';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import WorkflowRunsTable from '../../components/WorkflowRunsTable';
 import GitHubApiClient from '../../githubApiClient';
 import theme from '../../theme';
@@ -13,6 +17,7 @@ import DashCard from '../../components/DashCard';
 const Organization = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
     const [numberOfRepos, setNumberOfRepos] = useState(0);
+    const [numberOfOpenPrs, setNumberOfOpenPrs] = useState(0);
     const [completedWorkflowRateData, setCompletedWorkflowRateData] = useState({
         total: 0,
         successful: 0,
@@ -54,6 +59,13 @@ const Organization = (props) => {
             return response;
         }
 
+        const getOpenPrs = async () => {
+            const token = localStorage.getItem('token');
+            const gitHubApiClient = new GitHubApiClient(token);
+            var response = await gitHubApiClient.get(`/search/issues?q=is:open+is:pr+user:${props.match.params.orgid}`);
+            setNumberOfOpenPrs(response.total_count);
+        }
+
         const getAllRepoWorkflows = async () => {
             const repos = await getRepos();
             let allWorkflowRuns = [];
@@ -70,20 +82,51 @@ const Organization = (props) => {
             setWorkflowRuns(orderedRuns);
         }
     
+        getOpenPrs();
         getAllRepoWorkflows();
     }, [props.match.params.orgid]);
 
     const handleOnReposClick = () => {
-        window.open(`https://github.com/${props.match.params.orgid}`)
+        window.open(`https://github.com/${props.match.params.orgid}`, '_blank');
     };
+
+    const handleOnOpenPrsClick = () => {
+        window.open(`https://github.com/pulls?q=is%3Aopen+is%3Apr+user%3A${props.match.params.orgid}`)
+    }
 
     return (
         <Grid container item xs={12} spacing={2} style={{ padding: 16, paddingTop: 80 }}>
             <Grid lg={3} md={6} xs={12} item>
                 <DashCard
-                    text={`${numberOfRepos} repos`}
-                    icon={<Icon style={{ color: theme.palette.githubColors.yellow }}><RepoIcon size="medium" /></Icon>}
-                    onClick={handleOnReposClick}
+                    text="Fast facts"
+                    content={
+                        <List>
+                            <ListItem button onClick={handleOnReposClick}>
+                                <ListItemText 
+                                    primary={
+                                        <React.Fragment>
+                                            <Icon style={{ color: theme.palette.githubColors.yellow }}><RepoIcon /></Icon>&nbsp; Repos
+                                        </React.Fragment>
+                                    }
+                                />
+                                <Typography>
+                                    {numberOfRepos}
+                                </Typography>
+                            </ListItem>
+                            <ListItem button onClick={handleOnOpenPrsClick}>
+                                <ListItemText 
+                                    primary={
+                                        <React.Fragment>
+                                            <Icon style={{ color: theme.palette.githubColors.green }}><GitPullRequestIcon /></Icon>&nbsp; Open PRs
+                                        </React.Fragment>
+                                    }
+                                />
+                                <Typography>
+                                    {numberOfOpenPrs}
+                                </Typography>
+                            </ListItem>
+                        </List>
+                    }
                 />
             </Grid>
             <Grid lg={3} md={6} xs={12} item>
