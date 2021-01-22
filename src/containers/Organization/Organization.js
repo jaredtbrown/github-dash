@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import orderBy from 'lodash.orderby';
 import filter from 'lodash.filter';
 import Icon from '@material-ui/core/Icon';
-import { RepoIcon, WorkflowIcon, GitPullRequestIcon } from '@primer/octicons-react';
+import { RepoIcon, WorkflowIcon, GitPullRequestIcon, OrganizationIcon } from '@primer/octicons-react';
 import { Doughnut } from 'react-chartjs-2';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -99,6 +99,7 @@ const Organization = (props) => {
             <Grid lg={3} md={6} xs={12} item>
                 <DashCard
                     text="Fast facts"
+                    icon={<OrganizationIcon size="medium" />}
                     content={
                         <List>
                             <ListItem button onClick={handleOnReposClick}>
