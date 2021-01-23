@@ -45,19 +45,6 @@ const Login = (props) => {
         })
     });
 
-    const signIn = async () => {
-        try {
-            setError('');
-            const gitHubProvider = new firebase.auth.GithubAuthProvider();
-            gitHubProvider.addScope('user');
-            gitHubProvider.addScope('repo');
-            firebase.auth().signInWithRedirect(gitHubProvider);
-        } catch (error) {
-            console.error(error);
-            setError('Something went wrong. Please try again');
-        }
-    }
-
     return (
         <Grid
             container
