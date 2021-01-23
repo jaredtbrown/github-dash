@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { MarkGithubIcon } from '@primer/octicons-react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+import * as firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 const Login = (props) => {
     if (props.user) {
@@ -19,14 +19,30 @@ const Login = (props) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const getCredentials = async () => {
-            const result = await firebase.auth().getRedirectResult();
-            if (result.credential) {
-                localStorage.setItem('token', result.credential.accessToken);
-            }
-        };
+        // Initialize the FirebaseUI Widget using Firebase.
+        let ui = firebaseui.auth.AuthUI.getInstance();
+        if (!ui) {
+            ui = new firebaseui.auth.AuthUI(firebase.auth());
+        }
 
-        getCredentials();
+        ui.start('#firebaseui-auth-container', {
+            callbacks: {
+                signInSuccessWithAuthResult: (authResult) => {
+                    localStorage.setItem('token', authResult.credential.accessToken);
+                    return true;
+                },
+            },
+            signInSuccessUrl: '/',
+            signInOptions: [
+                {
+                    provider: firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                    scopes: [
+                        'user',
+                        'repo'
+                    ]
+                }
+            ]
+        })
     });
 
     const signIn = async () => {
@@ -67,9 +83,7 @@ const Login = (props) => {
                     <CardActions>
                         <Grid container alignItems="center" justify="center">
                             <Grid item>
-                                <Button variant="outlined" color="inherit" onClick={signIn}>
-                                    <MarkGithubIcon />&nbsp;Login with Github
-                                </Button>
+                                <div id="firebaseui-auth-container"></div>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography color="error">
