@@ -3,13 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import orderBy from 'lodash.orderby';
 import filter from 'lodash.filter';
 import Icon from '@material-ui/core/Icon';
-import { RepoIcon, WorkflowIcon, GitPullRequestIcon, OrganizationIcon, CodeIcon } from '@primer/octicons-react';
+import { WorkflowIcon, GraphIcon } from '@primer/octicons-react';
 import { Doughnut } from 'react-chartjs-2';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import { countBy, toPairs, flow, head, last, maxBy, partialRight } from 'lodash';
 import WorkflowRunsTable from '../../components/WorkflowRunsTable';
 import GitHubApiClient from '../../githubApiClient';
 import theme from '../../theme';
@@ -18,9 +13,6 @@ import InfoCard from '../InfoCard';
 
 const Organization = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
-    const [numberOfRepos, setNumberOfRepos] = useState(0);
-    const [numberOfOpenPrs, setNumberOfOpenPrs] = useState(0);
-    const [topLanguage, setTopLangague] = useState('');
     const [completedWorkflowRateData, setCompletedWorkflowRateData] = useState({
         total: 0,
         successful: 0,
@@ -84,6 +76,8 @@ const Organization = (props) => {
         <Grid container item xs={12} spacing={2} style={{ padding: 16, paddingTop: 80 }}>
             <Grid lg={3} md={6} xs={12} item>
                 <InfoCard
+                    text="Stats"
+                    icon={<Icon><GraphIcon size="medium" /></Icon>}
                     resource="orgs"
                     resourceId={props.match.params.orgid}
                 />

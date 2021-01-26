@@ -20,8 +20,12 @@ const MyWorkCard = (props) => {
         getUser();
     }, []);
 
+    const handleOnClick = () => {
+        props.onClick(user.login)
+    };
+
     return (
-        <Card style={{ cursor: 'pointer' }} onClick={props.onClick}>
+        <Card style={{ cursor: 'pointer' }} onClick={handleOnClick}>
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item>

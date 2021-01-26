@@ -12,8 +12,7 @@ import {
 import theme from '../../theme';
 import DashCard from '../../components/DashCard';
 import GitHubApiClient from '../../githubApiClient/index';
-import { flow, head, last, maxBy, partialRight, toPairs } from 'lodash';
-import countBy from 'lodash.countby'
+import { flow, head, last, maxBy, partialRight, toPairs, countBy } from 'lodash';
 
 const InfoCard = (props) => {
     const [numberOfRepos, setNumberOfRepos] = useState(0);

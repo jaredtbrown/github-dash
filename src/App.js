@@ -31,7 +31,7 @@ function App() {
           <Switch>
             <Route exact path="/login" component={() => <Login user={user} />}  />
             <ProtectedRoute exact path ="/" component={Home} user={user} />
-            <ProtectedRoute exact path ="/mywork" component={MyWork} user={user} />
+            <ProtectedRoute exact path ="/:username" component={MyWork} user={user} />
             <ProtectedRoute exact path ="/org/:orgid" component={Organization} user={user} />
             <Route path="*" component={() => {return (<div>404</div>) }} />
           </Switch>

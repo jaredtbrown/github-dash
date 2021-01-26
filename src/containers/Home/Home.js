@@ -22,8 +22,8 @@ const Home = (props) => {
         props.history.push(`/org/${org.login}`)
     };
 
-    const handleOnMyWorkClick = () => {
-        props.history.push('/mywork');
+    const handleOnMyWorkClick = (username) => {
+        props.history.push(`/${username}`);
     };
 
     const renderOrganization = (org) => {
