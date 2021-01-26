@@ -14,6 +14,7 @@ import WorkflowRunsTable from '../../components/WorkflowRunsTable';
 import GitHubApiClient from '../../githubApiClient';
 import theme from '../../theme';
 import DashCard from '../../components/DashCard';
+import InfoCard from '../InfoCard';
 
 const Organization = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
@@ -57,23 +58,7 @@ const Organization = (props) => {
             const token = localStorage.getItem('token');
             const gitHubApiClient = new GitHubApiClient(token);
             var response = await gitHubApiClient.get(`/orgs/${props.match.params.orgid}/repos`);
-            setNumberOfRepos(response.length);
-            const langauges = response.map((repo) => repo.language);
-            const language = flow(
-                countBy,
-                toPairs,
-                partialRight(maxBy, last),
-                head
-              )(langauges);
-            setTopLangague(language);
             return response;
-        }
-
-        const getOpenPrs = async () => {
-            const token = localStorage.getItem('token');
-            const gitHubApiClient = new GitHubApiClient(token);
-            var response = await gitHubApiClient.get(`/search/issues?q=is:open+is:pr+user:${props.match.params.orgid}`);
-            setNumberOfOpenPrs(response.total_count);
         }
 
         const getAllRepoWorkflows = async () => {
@@ -91,65 +76,16 @@ const Organization = (props) => {
             const orderedRuns = orderBy(allWorkflowRuns, ['created_at'], ['desc']);
             setWorkflowRuns(orderedRuns);
         }
-    
-        getOpenPrs();
+
         getAllRepoWorkflows();
     }, [props.match.params.orgid]);
-
-    const handleOnReposClick = () => {
-        window.open(`https://github.com/${props.match.params.orgid}`, '_blank');
-    };
-
-    const handleOnOpenPrsClick = () => {
-        window.open(`https://github.com/pulls?q=is%3Aopen+is%3Apr+user%3A${props.match.params.orgid}`)
-    }
 
     return (
         <Grid container item xs={12} spacing={2} style={{ padding: 16, paddingTop: 80 }}>
             <Grid lg={3} md={6} xs={12} item>
-                <DashCard
-                    text="Fast facts"
-                    icon={<OrganizationIcon size="medium" />}
-                    content={
-                        <List>
-                            <ListItem button onClick={handleOnReposClick}>
-                                <ListItemText 
-                                    primary={
-                                        <React.Fragment>
-                                            <Icon style={{ color: theme.palette.githubColors.yellow }}><RepoIcon /></Icon>&nbsp; Repos
-                                        </React.Fragment>
-                                    }
-                                />
-                                <Typography>
-                                    {numberOfRepos}
-                                </Typography>
-                            </ListItem>
-                            <ListItem button onClick={handleOnOpenPrsClick}>
-                                <ListItemText 
-                                    primary={
-                                        <React.Fragment>
-                                            <Icon style={{ color: theme.palette.githubColors.green }}><GitPullRequestIcon /></Icon>&nbsp; Open PRs
-                                        </React.Fragment>
-                                    }
-                                />
-                                <Typography>
-                                    {numberOfOpenPrs}
-                                </Typography>
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText 
-                                    primary={
-                                        <React.Fragment>
-                                            <CodeIcon />&nbsp; Top Language
-                                        </React.Fragment>
-                                    }
-                                />
-                                <Typography>
-                                    {topLanguage}
-                                </Typography>
-                            </ListItem>
-                        </List>
-                    }
+                <InfoCard
+                    resource="orgs"
+                    resourceId={props.match.params.orgid}
                 />
             </Grid>
             <Grid lg={3} md={6} xs={12} item>
