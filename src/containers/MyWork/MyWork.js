@@ -4,6 +4,7 @@ import WorkflowRuns from '../WorkflowRuns';
 import InfoCard from '../InfoCard';
 import Icon from '@material-ui/core/Icon';
 import { GraphIcon } from '@primer/octicons-react';
+import ReposCard from '../ReposCard';
 
 const MyWork = (props) => {
     return (
@@ -17,7 +18,7 @@ const MyWork = (props) => {
                 />
             </Grid>
             <Grid item xs={12}>
-                <WorkflowRuns resource="/user" />
+                <ReposCard resource="/user" />
             </Grid>
         </Grid>
     );
