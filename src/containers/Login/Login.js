@@ -7,43 +7,36 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import {withRouter} from 'react-router-dom';
-import * as firebaseui from 'firebaseui';
-import 'firebaseui/dist/firebaseui.css';
+import Button from '@material-ui/core/Button';
+import { MarkGithubIcon } from '@primer/octicons-react'
 
 const Login = (props) => {
-    if (props.user) {
-        props.history.push('/');
-    }
-
     const [error, setError] = useState('');
 
     useEffect(() => {
-        // Initialize the FirebaseUI Widget using Firebase.
-        let ui = firebaseui.auth.AuthUI.getInstance();
-        if (!ui) {
-            ui = new firebaseui.auth.AuthUI(firebase.auth());
-        }
+        const getCredentials = async () => {
+            const result = await firebase.auth().getRedirectResult();
+            if (result.credential) {
+                localStorage.setItem('token', result.credential.accessToken);
+                props.history.push('/');
+            }
+        };
 
-        ui.start('#firebaseui-auth-container', {
-            callbacks: {
-                signInSuccessWithAuthResult: (authResult) => {
-                    localStorage.setItem('token', authResult.credential.accessToken);
-                    return true;
-                },
-            },
-            signInSuccessUrl: '/',
-            signInOptions: [
-                {
-                    provider: firebase.auth.GithubAuthProvider.PROVIDER_ID,
-                    scopes: [
-                        'user',
-                        'repo'
-                    ]
-                }
-            ]
-        })
+        getCredentials();
     });
+
+    const signIn = async () => {
+        try {
+            setError('');
+            const gitHubProvider = new firebase.auth.GithubAuthProvider();
+            gitHubProvider.addScope('user');
+            gitHubProvider.addScope('repo');
+            firebase.auth().signInWithRedirect(gitHubProvider);
+        } catch (error) {
+            console.error(error);
+            setError('Something went wrong. Please try again');
+        }
+    }
 
     return (
         <Grid
@@ -70,7 +63,9 @@ const Login = (props) => {
                     <CardActions>
                         <Grid container alignItems="center" justify="center">
                             <Grid item>
-                                <div id="firebaseui-auth-container"></div>
+                                <Button variant="contained" color="primary" onClick={signIn}>
+                                    <MarkGithubIcon />&nbsp;Login with Github
+                                </Button>
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography color="error">
@@ -85,4 +80,4 @@ const Login = (props) => {
     );
 }
 
-export default withRouter(Login);
+export default Login;

@@ -12,15 +12,13 @@ import MyWork from './containers/MyWork';
 import Toolbar from './components/Toolbar';
 
 function App() {
+  const [appInitialized, setAppInitialized] = useState(false);
   const [user, setUser] = useState(null);
   
   firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setUser(user)
-    } else {
-      setUser(null);
-    }
-  })
+    setUser(user);
+    setAppInitialized(true);
+  });
 
   return (
     <MuiThemeProvider theme={createMuiTheme(theme)}>
@@ -29,10 +27,10 @@ function App() {
 
         <Router>
           <Switch>
-            <Route exact path="/login" component={() => <Login user={user} />}  />
-            <ProtectedRoute exact path ="/" component={Home} user={user} />
-            <ProtectedRoute exact path ="/:username" component={MyWork} user={user} />
-            <ProtectedRoute exact path ="/org/:orgid" component={Organization} user={user} />
+            <Route exact path="/login" component={Login} />
+            <ProtectedRoute exact path ="/" component={Home} user={user} appInitialized={appInitialized} />
+            <ProtectedRoute exact path ="/:username" component={MyWork} user={user} appInitialized={appInitialized} />
+            <ProtectedRoute exact path ="/org/:orgid" component={Organization} user={user} appInitialized={appInitialized} />
             <Route path="*" component={() => {return (<div>404</div>) }} />
           </Switch>
         </Router>

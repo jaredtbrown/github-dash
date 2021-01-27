@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, Route } from 'react-router-dom';
 
 const ProtectedRoute = (props) => {
-    if (!props.user) {
+    if (props.appInitialized && !props.user) {
         props.history.push('/login');
         return null;
     }
