@@ -7,6 +7,7 @@ import Icon from '@material-ui/core/Icon';
 import {
     RepoIcon,
     GitPullRequestIcon,
+    GitMergeIcon,
     CodeIcon
 } from '@primer/octicons-react'
 import theme from '../../theme';
@@ -17,6 +18,7 @@ import { flow, head, last, maxBy, partialRight, toPairs, countBy } from 'lodash'
 const InfoCard = (props) => {
     const [numberOfRepos, setNumberOfRepos] = useState(0);
     const [numberOfOpenPrs, setNumberOfOpenPrs] = useState(0);
+    const [numberOfMergedPrs, setNumberOfMergedPrs] = useState(0);
     const [topLanguage, setTopLanguage] = useState('');
 
     useEffect(() => {
@@ -43,8 +45,16 @@ const InfoCard = (props) => {
             setNumberOfOpenPrs(response.total_count);
         }
 
+        const getMergedPrs = async () => {
+            const token = localStorage.getItem('token');
+            const gitHubApiClient = new GitHubApiClient(token);
+            var response = await gitHubApiClient.get(`/search/issues?q=is:merged+is:pr+user:${props.resourceId}`);
+            setNumberOfMergedPrs(response.total_count);
+        }
+
         getRepos();
         getOpenPrs();
+        getMergedPrs();
     }, [props.resource, props.resourceId]);
 
     const handleOnReposClick = () => {
@@ -55,6 +65,9 @@ const InfoCard = (props) => {
         window.open(`https://github.com/pulls?q=is%3Aopen+is%3Apr+user%3A${props.resourceId}`)
     }
 
+    const handleOnMergedPrsClick = () => {
+        window.open(`https://github.com/pulls?q=is%3Amerged+is%3Apr+user%3A${props.resourceId}`)
+    }
 
     return (
         <DashCard
@@ -84,6 +97,18 @@ const InfoCard = (props) => {
                         />
                         <Typography>
                             {numberOfOpenPrs}
+                        </Typography>
+                    </ListItem>
+                    <ListItem button onClick={handleOnMergedPrsClick}>
+                        <ListItemText 
+                            primary={
+                                <React.Fragment>
+                                    <Icon style={{ color: theme.palette.githubColors.purple }}><GitMergeIcon /></Icon>&nbsp; Merged PRs
+                                </React.Fragment>
+                            }
+                        />
+                        <Typography>
+                            {numberOfMergedPrs}
                         </Typography>
                     </ListItem>
                     <ListItem>
