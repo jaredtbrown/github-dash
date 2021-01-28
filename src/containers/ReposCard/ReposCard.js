@@ -10,6 +10,8 @@ import GitHubApiClient from '../../githubApiClient';
 import DashCard from '../../components/DashCard';
 import orderBy from 'lodash.orderby';
 import { withRouter } from 'react-router-dom';
+import Chip from '@material-ui/core/Chip';
+import gitHubLangColors from '../../github-lang-colors'
 
 const ReposCard = (props) => {
     const [repos, setRepos] = useState([]);
@@ -33,7 +35,13 @@ const ReposCard = (props) => {
                     {repo.full_name}
                 </TableCell>
                 <TableCell>
-                    {repo.stargazers_count}
+                    {
+                        repo.language ? (
+                            <Chip label={repo.language} style={{ backgroundColor: gitHubLangColors[repo.language] }} />
+                        ) : (
+                            "Not sure"
+                        )
+                    }
                 </TableCell>
                 <TableCell>
                     {repo.pushed_at}
@@ -54,7 +62,7 @@ const ReposCard = (props) => {
                                 Repo
                             </TableCell>
                             <TableCell>
-                                Stars
+                                Written In
                             </TableCell>
                             <TableCell>
                                 Last Pushed At
