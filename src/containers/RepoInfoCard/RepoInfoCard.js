@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import DashCard from '../../components/DashCard';
 import GitHubApiClient from '../../githubApiClient';
-import { CodeIcon } from '@primer/octicons-react';
 import { HorizontalBar } from 'react-chartjs-2';
 import gitHubLangColors from '../../github-lang-colors';
 
