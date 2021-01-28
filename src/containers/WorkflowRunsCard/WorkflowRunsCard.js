@@ -13,7 +13,6 @@ import DashCard from '../../components/DashCard';
 import Icon from '@material-ui/core/Icon';
 
 const WorkflowRunsCard = (props) => {
-    console.log(props);
     const [workflowRuns, setWorkflowRuns] = useState([]);
 
     useEffect(() => {
