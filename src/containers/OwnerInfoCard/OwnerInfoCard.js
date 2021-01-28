@@ -15,7 +15,7 @@ import DashCard from '../../components/DashCard';
 import GitHubApiClient from '../../githubApiClient/index';
 import { flow, head, last, maxBy, partialRight, toPairs, countBy } from 'lodash';
 
-const InfoCard = (props) => {
+const OwnerInfoCard = (props) => {
     const [numberOfRepos, setNumberOfRepos] = useState(0);
     const [numberOfOpenPrs, setNumberOfOpenPrs] = useState(0);
     const [numberOfMergedPrs, setNumberOfMergedPrs] = useState(0);
@@ -129,4 +129,4 @@ const InfoCard = (props) => {
     );
 }
  
-export default InfoCard;
+export default OwnerInfoCard;
