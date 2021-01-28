@@ -1,6 +1,5 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import WorkflowRuns from '../WorkflowRuns';
 import InfoCard from '../InfoCard';
 import Icon from '@material-ui/core/Icon';
 import { GraphIcon } from '@primer/octicons-react';

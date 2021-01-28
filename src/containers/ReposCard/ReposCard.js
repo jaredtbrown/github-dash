@@ -9,6 +9,7 @@ import { RepoIcon } from '@primer/octicons-react';
 import GitHubApiClient from '../../githubApiClient';
 import DashCard from '../../components/DashCard';
 import orderBy from 'lodash.orderby';
+import { withRouter } from 'react-router-dom';
 
 const ReposCard = (props) => {
     const [repos, setRepos] = useState([]);
@@ -27,7 +28,7 @@ const ReposCard = (props) => {
 
     const renderRepo = (repo) => {
         return (
-            <TableRow key={repo.id} onClick={() => { window.open(repo.html_url, '_blank') }} style={{ cursor: 'pointer' }}>
+            <TableRow key={repo.id} onClick={() => { props.history.push(`/${repo.full_name}`) }} style={{ cursor: 'pointer' }}>
                 <TableCell>
                     {repo.full_name}
                 </TableCell>
@@ -69,4 +70,4 @@ const ReposCard = (props) => {
     );
 }
  
-export default ReposCard;
+export default withRouter(ReposCard);

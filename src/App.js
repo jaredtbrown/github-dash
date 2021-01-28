@@ -10,6 +10,7 @@ import Home from './containers/Home';
 import Organization from './containers/Organization';
 import MyWork from './containers/MyWork';
 import Toolbar from './components/Toolbar';
+import Repo from './containers/Repo';
 
 function App() {
   const [appInitialized, setAppInitialized] = useState(false);
@@ -31,6 +32,7 @@ function App() {
             <ProtectedRoute exact path ="/" component={Home} user={user} appInitialized={appInitialized} />
             <ProtectedRoute exact path ="/:username" component={MyWork} user={user} appInitialized={appInitialized} />
             <ProtectedRoute exact path ="/org/:orgid" component={Organization} user={user} appInitialized={appInitialized} />
+            <ProtectedRoute exact path="/:owner/:repo" component={Repo} user={user} appInitialized={appInitialized} />
             <Route path="*" component={() => {return (<div>404</div>) }} />
           </Switch>
         </Router>
