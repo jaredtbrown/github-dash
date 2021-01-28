@@ -19,7 +19,7 @@ const gitHubLangColors = {
     "AutoIt": "#1C3552", 
     "BlitzMax": "#cd6400", 
     "Boo": "#d4bec1", 
-    "C Sharp": "#178600", 
+    "C#": "#178600", 
     "C": "#555555", 
     "Chapel": "#8dc63f", 
     "Cirru": "#ccccff", 
