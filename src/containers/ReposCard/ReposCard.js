@@ -10,8 +10,7 @@ import GitHubApiClient from '../../githubApiClient';
 import DashCard from '../../components/DashCard';
 import orderBy from 'lodash.orderby';
 import { withRouter } from 'react-router-dom';
-import Chip from '@material-ui/core/Chip';
-import gitHubLangColors from '../../github-lang-colors'
+import RepoItem from '../RepoItem';
 
 const ReposCard = (props) => {
     const [repos, setRepos] = useState([]);
@@ -30,23 +29,7 @@ const ReposCard = (props) => {
 
     const renderRepo = (repo) => {
         return (
-            <TableRow key={repo.id} onClick={() => { props.history.push(`/${repo.full_name}`) }} style={{ cursor: 'pointer' }}>
-                <TableCell>
-                    {repo.full_name}
-                </TableCell>
-                <TableCell>
-                    {
-                        repo.language ? (
-                            <Chip label={repo.language} style={{ backgroundColor: gitHubLangColors[repo.language] }} />
-                        ) : (
-                            "Not sure"
-                        )
-                    }
-                </TableCell>
-                <TableCell>
-                    {repo.pushed_at}
-                </TableCell>
-            </TableRow>
+            <RepoItem repo={repo} />
         )
     }
     
@@ -62,7 +45,10 @@ const ReposCard = (props) => {
                                 Repo
                             </TableCell>
                             <TableCell>
-                                Written In
+                                Latest Workflow Run
+                            </TableCell>
+                            <TableCell>
+                                Language
                             </TableCell>
                             <TableCell>
                                 Last Pushed At
