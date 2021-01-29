@@ -4,6 +4,7 @@ import WorkflowRunsCard from '../WorkflowRunsCard';
 import RepoInfoCard from '../RepoInfoCard';
 import { RepoIcon } from '@primer/octicons-react';
 import Icon from '@material-ui/core/Icon';
+import WorkflowRunsSuccessRateCard from '../WorkflowRunsSuccessRateCard';
 
 const Repo = (props) => {
     const { owner, repo } = props.match.params;
@@ -14,6 +15,11 @@ const Repo = (props) => {
                 <RepoInfoCard
                     text={repo}
                     icon={<Icon><RepoIcon size="medium" /></Icon>}
+                    repoFullName={repoFullName}
+                />
+            </Grid>
+            <Grid lg={3} md={6} xs={12} item>
+                <WorkflowRunsSuccessRateCard
                     repoFullName={repoFullName}
                 />
             </Grid>
