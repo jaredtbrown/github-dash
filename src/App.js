@@ -23,10 +23,9 @@ function App() {
 
   return (
     <MuiThemeProvider theme={createMuiTheme(theme)}>
-      <React.Fragment>
-        <Toolbar user={user} />
-
         <Router>
+          <Toolbar user={user} />
+
           <Switch>
             <Route exact path="/login" component={Login} />
             <ProtectedRoute exact path ="/" component={Home} user={user} appInitialized={appInitialized} />
@@ -36,7 +35,6 @@ function App() {
             <Route path="*" component={() => {return (<div>404</div>) }} />
           </Switch>
         </Router>
-      </React.Fragment>
     </MuiThemeProvider>
   );
 }
