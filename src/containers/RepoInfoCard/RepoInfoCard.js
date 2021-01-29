@@ -63,16 +63,19 @@ const RepoInfoCard = (props) => {
             icon={props.icon}
             content={
                 <Grid container item xs={12} spacing={2}>
-                    <Grid container item xs={12}>
-                        <Grid item xs={4}>
-                            <Typography>Languages</Typography>
+                    {
+                        Object.keys(languages).length > 0 &&
+                            <Grid container item xs={12}>
+                            <Grid item xs={4}>
+                                <Typography>Languages</Typography>
+                            </Grid>
+                            <Grid item xs={8} style={{ display: 'flex' }}>
+                                {
+                                    Object.keys(languages).map(renderLanguage)
+                                }
+                            </Grid>
                         </Grid>
-                        <Grid item xs={8} style={{ display: 'flex' }}>
-                            {
-                                Object.keys(languages).map(renderLanguage)
-                            }
-                        </Grid>
-                    </Grid>
+                    }
                     <Grid container item xs={12}>
                         <Grid item xs={4}>
                             <Typography>Branches</Typography>
