@@ -46,6 +46,9 @@ const WorkflowRun = (props) => {
                 {jobs.map(renderJobs)}
             </TableCell>
             <TableCell>
+                {run.head_branch}
+            </TableCell>
+            <TableCell>
                 {run.created_at}
             </TableCell>
         </TableRow>

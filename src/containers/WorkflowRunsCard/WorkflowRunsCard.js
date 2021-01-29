@@ -46,6 +46,9 @@ const WorkflowRunsCard = (props) => {
                                 Jobs
                             </TableCell>
                             <TableCell>
+                                Branch
+                            </TableCell>
+                            <TableCell>
                                 Created
                             </TableCell>
                         </TableRow>

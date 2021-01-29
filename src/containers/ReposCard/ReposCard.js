@@ -29,7 +29,7 @@ const ReposCard = (props) => {
 
     const renderRepo = (repo) => {
         return (
-            <RepoItem repo={repo} />
+            <RepoItem key={repo.id} repo={repo} />
         )
     }
     
