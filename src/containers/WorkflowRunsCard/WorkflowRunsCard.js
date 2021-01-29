@@ -6,11 +6,10 @@ import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import orderBy from 'lodash.orderby';
 import GitHubApiClient from '../../githubApiClient';
-import WorkflowStatus from '../../components/WorkflowStatus';
-import Link from '@material-ui/core/Link';
 import { WorkflowIcon } from '@primer/octicons-react';
 import DashCard from '../../components/DashCard';
 import Icon from '@material-ui/core/Icon';
+import WorkflowRun from '../WorkflowRun/index'
 
 const WorkflowRunsCard = (props) => {
     const [workflowRuns, setWorkflowRuns] = useState([]);
@@ -28,18 +27,7 @@ const WorkflowRunsCard = (props) => {
 
     const renderWorkflowRun = (run) => {
         return (
-            <TableRow key={run.id} onClick={() => { window.open(run.html_url, '_blank') }} style={{ cursor: 'pointer' }}>
-                <TableCell>
-                    <WorkflowStatus status={run.status} conclusion={run.conclusion} />&nbsp;
-                    {run.name}
-                </TableCell>
-                <TableCell>
-                    <Link color="inherit" href={run.repository.html_url} target="_blank" rel="noreferrer">{run.repository.name}</Link>
-                </TableCell>
-                <TableCell>
-                    {run.created_at}
-                </TableCell>
-            </TableRow>
+            <WorkflowRun key={run.id} run={run} repoFullName={props.repoFullName} />
         )
     };
 
@@ -55,7 +43,7 @@ const WorkflowRunsCard = (props) => {
                                 Name
                             </TableCell>
                             <TableCell>
-                                Repo
+                                Jobs
                             </TableCell>
                             <TableCell>
                                 Created

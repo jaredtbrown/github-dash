@@ -14,6 +14,10 @@ const WorkflowStatus = (props) => {
     const { githubColors } = theme.palette;
 
     const getTooltipText = () => {
+        if (props.text) {
+            return props.text;
+        }
+
         if (props.status === 'completed') {
             return props.conclusion;
         }
