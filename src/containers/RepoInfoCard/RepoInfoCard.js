@@ -9,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 const RepoInfoCard = (props) => {
     const [repo, setRepo] = useState({});
     const [languages, setLanguages] = useState({});
+    const [numberOfBranches, setNumberOfBranches] = useState(0);
 
     useEffect(() => {
         const getRepo = async () => {
@@ -25,8 +26,16 @@ const RepoInfoCard = (props) => {
             setLanguages(response);
         };
 
+        const getNumberOfBranches = async () => {
+            const token = localStorage.getItem('token');
+            const gitHubApiClient = new GitHubApiClient(token);
+            var response = await gitHubApiClient.get(`/repos/${props.repoFullName}/branches`);
+            setNumberOfBranches(response.length);
+        };
+
         getRepo();
         getReposLanguages();
+        getNumberOfBranches();
     }, [props.repoFullName]);
 
     const totalLanguageBytes = Object.values(languages).reduce((a, b) => { return a + b }, 0);
@@ -62,6 +71,14 @@ const RepoInfoCard = (props) => {
                             {
                                 Object.keys(languages).map(renderLanguage)
                             }
+                        </Grid>
+                    </Grid>
+                    <Grid container item xs={12}>
+                        <Grid item xs={4}>
+                            <Typography>Branches</Typography>
+                        </Grid>
+                        <Grid container item xs={8}>
+                            <Typography align="right" style={{ width: '100%' }}>{numberOfBranches}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container item xs={12}>
