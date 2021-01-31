@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase/app';
+import 'firebase/analytics';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -12,6 +13,7 @@ const firebaseConfig = {
   storageBucket: `${process.env.REACT_APP_FIREBASE_STORAGE_BUCKET}`,
   messagingSenderId: `${process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID}`,
   appId: `${process.env.REACT_APP_FIREBASE_APP_ID}`,
+  measurementId: `${process.env.REACT_APP_FIREBASE_MEASUREMENT_ID}`
 };
 
 firebase.initializeApp(firebaseConfig);
