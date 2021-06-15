@@ -56,10 +56,10 @@ functions:
                 - "Lambda Function Invocation Result - Failure" # This is in case the message is replayed
               detail:
                 event:
-                  - "Milestone Finished"
+                  - "Custom Field Changed"
                 fields:
-                  Log.MS.CurrentMilestone:
-                    - "UW REVIEW - SUSP"
+                  CX.LOANSTATUSAUTO:
+                    - "1"
     destinations:
       onSuccess: ${self:custom.eventBusArn}
       onFailure: ${self:custom.eventBusArn}
