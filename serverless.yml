@@ -65,7 +65,7 @@ functions:
       onFailure: ${self:custom.eventBusArn}
   
   cancelUdnOrderReplay:
-    handler: src/functions/cancelUdnOrderReplay.handler
+    handler: src/functions/cancelUDNOrderReplay.handler
     events:
       - sqs: ${self:custom.replayQueueArn}
 
