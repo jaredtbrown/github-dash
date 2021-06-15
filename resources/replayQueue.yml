@@ -1,0 +1,111 @@
+Resources:
+
+  CancelUdnOrderReplayQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${self:service}-${self:custom.stage}-cancelUdnOrder-replay
+
+  CancelUdnOrderReplayQueueRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Replay"
+      Name: ${self:service}-${self:custom.stage}-cp-cancel-udn-order-replay-rule
+      State: "ENABLED"
+      EventBusName: ${self:custom.eventBusArn}
+      EventPattern:
+        detail-type:
+          - "Lambda Function Invocation Result - Failure"
+        resources:
+          - "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:cp-cancel-udn-order-${self:custom.stage}-cancelUdnOrder:$LATEST"
+        source:
+          - "com.revolutionmortgage.encompass"
+        detail:
+          requestPayload:
+            detail:
+              retries:
+              - exists: false
+              - numeric:
+                - "<="
+                - ${self:custom.replayMaxCount}
+
+
+      RoleArn: !GetAtt CancelUdnOrderReplayQueueRuleRole.Arn
+      Targets:
+        - Arn: !GetAtt CancelUdnOrderReplayQueue.Arn
+          Id: CancelUdnOrderReplayQueueRule1
+          InputPath: "$.detail.requestPayload"
+
+  CancelUdnOrderReplayQueueRulePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Action: sqs:*
+          Effect: Allow
+          Resource: !GetAtt CancelUdnOrderReplayQueue.Arn
+        Version: '2012-10-17'
+      PolicyName: CancelUdnOrderReplayQueueRulePolicyName
+      Roles:
+      - Ref: CancelUdnOrderReplayQueueRuleRole
+
+  CancelUdnOrderReplayQueueRuleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - events.amazonaws.com
+            - sqs.amazonaws.com
+        Version: '2012-10-17'
+
+  CancelUdnOrderReplayQueuePolicy:
+    DependsOn:
+    - CancelUdnOrderReplayQueue
+    - CancelUdnOrderReplayQueueRule
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Id: CancelUdnOrderReplayQueuePolicy
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - events.amazonaws.com
+            - sqs.amazonaws.com
+          Action: sqs:SendMessage
+          Resource: !GetAtt CancelUdnOrderReplayQueue.Arn
+      Queues:
+      - Ref: CancelUdnOrderReplayQueue
+
+
+
+
+
+
+  # CancelUdnOrderReplayQueueIamRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #       - Effect: Allow
+  #         Principal:
+  #           Service:
+  #             !Sub events.amazonaws.com
+  #         Action: sts:AssumeRole
+  #     Path: /
+  #     # RoleName: ${self:service}-${self:provider.stage}-cp-encompass-event-bus-role
+  #     Policies:
+  #     - PolicyName: ${self:service}-${self:provider.stage}-cp-cancel-udn-order-replay-policy
+  #       PolicyDocument:
+  #         Version: "2012-10-17"
+  #         Statement:
+  #         - Effect: Allow
+  #           Action:
+  #           - sqs:SendMessage
+  #           Resource:
+  #           - ${self:custom.replayQueueArn}
