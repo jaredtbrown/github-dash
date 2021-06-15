@@ -1,6 +1,6 @@
 org: revolutionmortgage
-app: replace-me
-service: replace-me
+app: credit-plus
+service: cp-cancel-udn-order
 
 custom:
     stage: ${opt:stage, self:provider.stage}
@@ -9,6 +9,15 @@ custom:
       stage: stageAccount
       dev: devAccount
       pr: prAccount
+    eventBusName: "${self:custom.stage}-credit-plus"
+    eventBusArn: "arn:aws:events:#{AWS::Region}:#{AWS::AccountId}:event-bus/${self:custom.eventBusName}"
+    replayQueueArn: "arn:aws:sqs:#{AWS::Region}:#{AWS::AccountId}:${self:service}-${self:custom.stage}-cancelUdnOrder-replay"
+    creditPlusApi:
+      prod: https://creditplus-api-proxy.rmtg.io/inetapi/request_products.aspx
+      stage: https://creditplus-api-proxy.stagerm.io/inetapi/request_products.aspx
+      dev: https://creditplus-api-proxy.devrm.io/inetapi/request_products.aspx
+      pr: https://creditplus-api-proxy.prrm.io/inetapi/request_products.aspx
+    replayMaxCount: 20 # This is when messages quit replaying and go to the DLQ
 
 provider:
   name: aws
@@ -17,24 +26,52 @@ provider:
   profile: ${self:custom.profile.${self:custom.stage}}
   region: us-east-2
   tracing:
-    apiGateway: true
+    apiGateway: false
     lambda: true
   logs:
     restApi: true
   environment:
     REGEN_CF_VARS: Change me # Change this to force CloudFormation to regen stack. Useful if you change a value in secrets manager
+    REGION: ${self:provider.region}
+    CP_EVENT_BUS: ${self:custom.eventBusName}
+    CREDIT_PLUS_API_ENDPOINT: ${self:custom.creditPlusApi.${self:custom.stage}}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: ${self:custom.eventBusArn}
+
 functions:
-  branchApiGwRoute:
-    handler: src/functions/lambda.handler
+  cancelUDNOrder:
+    handler: src/functions/cancelUDNOrder.handler
     events:
       - eventBridge:
-          eventBus: ARN To Event Bus Goes here
+          eventBus: ${self:custom.eventBusArn}
           pattern:
-            source:
-              - "com.revolutionmortgage.something"
+            pattern:
+              source:
+                - "com.revolutionmortgage.encompass"
+              detail-type:
+                - "Loan"
+                - "Lambda Function Invocation Result - Failure" # This is in case the message is replayed
+              detail:
+                event:
+                  - "Milestone Finished"
+                fields:
+                  Log.MS.CurrentMilestone:
+                    - "UW REVIEW - SUSP"
+    destinations:
+      onSuccess: ${self:custom.eventBusArn}
+      onFailure: ${self:custom.eventBusArn}
+  
+  cancelUdnOrderReplay:
+    handler: src/functions/cancelUdnOrderReplay.handler
+    events:
+      - sqs: ${self:custom.replayQueueArn}
 
 resources:
-  - ${file(./resources/alarms.yml)}
+  - ${file(./resources/replayQueue.yml)}
+  - ${file(./resources/deadLetterQueue.yml)}
 
 plugins:
   - serverless-plugin-typescript

@@ -1,5 +1,5 @@
 {
-  "name": "make this the same as the serverless.yml service",
+  "name": "cp-cancel-udn-order",
   "version": "1.0.0",
   "description": "",
   "author": "",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@revolutionmortgage/rm-logger": "^0.0.14",
+    "axios": "^0.21.1",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
