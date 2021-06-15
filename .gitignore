@@ -92,6 +92,7 @@ dist
 .vuepress/dist
 
 # Serverless directories
+.build
 .serverless/
 
 # FuseBox cache
