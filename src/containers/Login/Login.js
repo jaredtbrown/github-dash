@@ -60,7 +60,7 @@ const Login = (props) => {
                     <CardContent>
                         <Typography variant="subtitle1">GitHub Dash. A dashboard for GitHub.</Typography>
                     </CardContent>
-                    <CardActions>
+                    {/* <CardActions>
                         <Grid container alignItems="center" justify="center">
                             <Grid item>
                                 <Button variant="contained" color="primary" onClick={signIn}>
@@ -73,7 +73,7 @@ const Login = (props) => {
                                 </Typography>
                             </Grid>
                         </Grid>
-                    </CardActions>
+                    </CardActions> */}
                 </Card>
             </Grid>
         </Grid>
